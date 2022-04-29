@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.core import mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
@@ -22,26 +22,38 @@ def create(request):
     if not form.is_valid():
         return render(request, 'subscriptions/subscription_form.html', {'form': form})
 
-    # if settings.DEBUG:
-    #     # Send Mail
-    #     template_name = 'subscriptions/subscription_email.txt'
-    #     context = form.cleaned_data
-    #     subject = 'Confirmacao de Inscricao'
-    #     from_ = settings.DEFAULT_FROM_EMAIL
-    #     to = form.cleaned_data['email']
-    #     _send_mail(subject, from_, to, template_name, context)
+    subscription = Subscription.objects.create(**form.cleaned_data)
 
-    Subscription.objects.create(**form.cleaned_data)
+    if settings.DEBUG:
+        # Send Mail
+        template_name = 'subscriptions/subscription_email.txt'
+        subject = 'Confirmacao de Inscricao'
+        from_ = settings.DEFAULT_FROM_EMAIL
+        # outra forma de fazer -> # to = form.cleaned_data['email']
+        to = subscription.email
+        context = {'subscription': subscription}
+        _send_mail(subject, from_, to, template_name, context)
 
     # Success Feedback
-    messages.success(request, 'Inscrição realizada com sucesso!')
+    # messages.success(request, 'Inscrição realizada com sucesso!')
 
-    return HttpResponseRedirect('/inscricao/')
+    return HttpResponseRedirect('/inscricao/{}/'.format(subscription.pk))
 
 
 def new(request):
     context = {'form': SubscriptionForm()}
     return render(request, 'subscriptions/subscription_form.html', context)
+
+
+def detail(request, pk):
+
+    try:
+        subscription = Subscription.objects.get(pk=pk)
+        context = {'subscription': subscription}
+    except Subscription.DoesNotExist:
+        raise Http404
+
+    return render(request, 'subscriptions/subscription_detail.html', context)
 
 
 def _send_mail(subject, from_, to, template_name, context):

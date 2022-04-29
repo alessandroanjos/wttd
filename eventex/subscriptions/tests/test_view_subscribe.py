@@ -1,3 +1,4 @@
+from django.test.utils import override_settings
 from django.core import mail
 from django.test import TestCase
 
@@ -49,14 +50,16 @@ class SubscribeGet(TestCase):
 
 class SubscribePostValid(TestCase):
 
+    @override_settings(DEBUG=True)
     def setUp(self) -> None:
         data = dict(name='Fernando Meireles', cpf='12345678901',
                     email='fernando@meireles.com', phone='11-99999-8888')
         self.response = self.client.post('/inscricao/', data)
 
     def test_post(self):
-        """ Valid POST should redirect to /inscricao/ """
-        self.assertEqual(302, self.response.status_code)
+        """ Valid POST should redirect to /inscricao/1/ """
+        self.assertRedirects(self.response, '/inscricao/1/')
+        # self.assertEqual(302, self.response.status_code)
 
     def test_send_subscribe_email(self):
         self.assertEqual(1, len(mail.outbox))
@@ -88,12 +91,12 @@ class SubcribePostInvalid(TestCase):
     def test_save_subscription(self):
         self.assertFalse(Subscription.objects.exists())
 
-
-class SubcribeSuccessMessage(TestCase):
-
-    def test_message(self):
-        data = dict(name='Fernando Meireles', cpf='12345678901',
-                    email='fernando@email.com', phone='11-99999-8888')
-
-        response = self.client.post('/inscricao/', data, follow=True)
-        self.assertContains(response, 'Inscrição realizada com sucesso!')
+# @unittest.skip('To be removed')
+# class SubcribeSuccessMessage(TestCase):
+#
+#     def test_message(self):
+#         data = dict(name='Fernando Meireles', cpf='12345678901',
+#                     email='fernando@email.com', phone='11-99999-8888')
+#
+#         response = self.client.post('/inscricao/', data, follow=True)
+#         self.assertContains(response, 'Inscrição realizada com sucesso!')

@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.core import mail
+from django.test.utils import override_settings
 
 
 class SubscribePostValid(TestCase):
 
+    @override_settings(DEBUG=True)
     def setUp(self) -> None:
         data = dict(name='Fernando Meireles', cpf='12345678901',
                     email='fernando@meireles.com', phone='11-99999-8888')
