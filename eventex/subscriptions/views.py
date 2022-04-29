@@ -22,15 +22,14 @@ def create(request):
     if not form.is_valid():
         return render(request, 'subscriptions/subscription_form.html', {'form': form})
 
-
-    if settings.DEBUG:
-        # Send Mail
-        template_name = 'subscriptions/subscription_email.txt'
-        context = form.cleaned_data
-        subject = 'Confirmacao de Inscricao'
-        from_ = settings.DEFAULT_FROM_EMAIL
-        to = form.cleaned_data['email']
-        _send_mail(subject, from_, to, template_name, context)
+    # if settings.DEBUG:
+    #     # Send Mail
+    #     template_name = 'subscriptions/subscription_email.txt'
+    #     context = form.cleaned_data
+    #     subject = 'Confirmacao de Inscricao'
+    #     from_ = settings.DEFAULT_FROM_EMAIL
+    #     to = form.cleaned_data['email']
+    #     _send_mail(subject, from_, to, template_name, context)
 
     Subscription.objects.create(**form.cleaned_data)
 
