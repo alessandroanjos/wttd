@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core import mail
 from django.test.utils import override_settings
+from django.shortcuts import resolve_url as resolve
 
 
 class SubscribePostValid(TestCase):
@@ -9,7 +10,7 @@ class SubscribePostValid(TestCase):
     def setUp(self) -> None:
         data = dict(name='Fernando Meireles', cpf='12345678901',
                     email='fernando@meireles.com', phone='11-99999-8888')
-        self.client.post('/inscricao/', data)
+        self.client.post(resolve('subscriptions:new'), data)
         self.email = mail.outbox[0]
 
 

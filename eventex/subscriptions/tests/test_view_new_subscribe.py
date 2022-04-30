@@ -1,14 +1,15 @@
 from django.test.utils import override_settings
 from django.core import mail
 from django.test import TestCase
+from django.shortcuts import resolve_url as resolve
 
 from eventex.subscriptions.forms import SubscriptionForm
 from eventex.subscriptions.models import Subscription
 
 
-class SubscribeGet(TestCase):
+class SubscriptionsNewGet(TestCase):
     def setUp(self) -> None:
-        self.response = self.client.get('/inscricao/')
+        self.response = self.client.get(resolve('subscriptions:new'))
 
     def test_get(self):
         """GET /inscricao/ must return status code 200"""
@@ -35,7 +36,6 @@ class SubscribeGet(TestCase):
         """Html must constain csrf"""
         self.assertContains(self.response, 'csrfmiddlewaretoken')
 
-
     def test_has_form(self):
         """Context must have subcription form"""
         form = self.response.context['form']
@@ -48,17 +48,17 @@ class SubscribeGet(TestCase):
     #     self.assertSequenceEqual(['name', 'cpf', 'email', 'phone'], list(form.fields))
 
 
-class SubscribePostValid(TestCase):
+class SubscriptionsNewPostValid(TestCase):
 
     @override_settings(DEBUG=True)
     def setUp(self) -> None:
         data = dict(name='Fernando Meireles', cpf='12345678901',
                     email='fernando@meireles.com', phone='11-99999-8888')
-        self.response = self.client.post('/inscricao/', data)
+        self.response = self.client.post(resolve('subscriptions:new'), data)
 
     def test_post(self):
         """ Valid POST should redirect to /inscricao/1/ """
-        self.assertRedirects(self.response, '/inscricao/1/')
+        self.assertRedirects(self.response, resolve('subscriptions:detail', 1))
         # self.assertEqual(302, self.response.status_code)
 
     def test_send_subscribe_email(self):
@@ -68,10 +68,10 @@ class SubscribePostValid(TestCase):
         self.assertTrue(Subscription.objects.exists())
 
 
-class SubcribePostInvalid(TestCase):
+class SubscriptionsNewPostInvalid(TestCase):
 
     def setUp(self) -> None:
-        self.response = self.client.post('/inscricao/', {})
+        self.response = self.client.post(resolve('subscriptions:new'), {})
 
     def test_post(self):
         """Invalid POST should not redirect"""
