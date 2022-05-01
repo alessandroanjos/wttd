@@ -52,7 +52,7 @@ class SubscriptionsNewPostValid(TestCase):
 
     @override_settings(DEBUG=True)
     def setUp(self) -> None:
-        data = dict(name='Fernando Meireles', cpf='12345678901',
+        data = dict(name='Fernando Meireles', cpf='45481811057',
                     email='fernando@meireles.com', phone='11-99999-8888')
         self.response = self.client.post(resolve('subscriptions:new'), data)
 
