@@ -27,7 +27,10 @@ def create(request):
     if not form.is_valid():
         return render(request, 'subscriptions/subscription_form.html', {'form': form})
 
-    subscription = Subscription.objects.create(**form.cleaned_data)
+    # Usando o ModelForm com save()
+    """Usar quando se tem o formulario muito proximo com o do modelo"""
+    subscription = form.save()
+    # subscription = Subscription.objects.create(**form.cleaned_data)
 
     if settings.DEBUG:
         # Send Mail
