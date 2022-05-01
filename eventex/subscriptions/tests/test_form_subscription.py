@@ -46,6 +46,21 @@ class SubscriptionFormTest(TestCase):
         form = self.make_validated_form(name='FERNANDO MEIRELES')
         self.assertEqual('Fernando Meireles', form.cleaned_data['name'])
 
+    def test_email_is_optional(self):
+        """Email is optional"""
+        form = self.make_validated_form(email='')
+        self.assertFalse(form.errors)
+
+    def test_phone_is_optional(self):
+        """Phone is optional"""
+        form = self.make_validated_form(phone='')
+        self.assertFalse(form.errors)
+
+    def test_must_inform_phone_or_email(self):
+        """Email and Phone are optional, but one must be informed"""
+        form = self.make_validated_form(email='', phone='')
+        self.assertListEqual(['__all__'], list(form.errors))
+
     def assertFormErrorCode(self, form, field, code):
         errors = form.errors.as_data()
         errors_list = errors[field]
@@ -58,7 +73,7 @@ class SubscriptionFormTest(TestCase):
         self.assertListEqual([msg], errors_list)
 
     def make_validated_form(self, **kwargs):
-        valid = dict(name='Fernando Meireles', cpf='12345678901',
+        valid = dict(name='Fernando Meireles', cpf='45481811057',
                      email='fernando@meireles.com', phone='11-99999-8888')
         data = dict(valid, **kwargs)
         # instancia o formulario
