@@ -36,9 +36,15 @@ class SubscriptionFormTest(TestCase):
         self.assertFormErrorCode(form, field, code)
 
     def test_cpf_is_invalid(self):
-        """CPF must only accepts digits"""
+        """CPF must only accepts valid value"""
         form = self.make_validated_form(cpf='12345678901')
         self.assertListEqual(['cpf'], list(form.errors))
+
+    def test_name_must_be_capitalized(self):
+        """Name must be capitalized"""
+        # FERNANDO MEIRELES -> Fernando Meireles
+        form = self.make_validated_form(name='FERNANDO MEIRELES')
+        self.assertEqual('Fernando Meireles', form.cleaned_data['name'])
 
     def assertFormErrorCode(self, form, field, code):
         errors = form.errors.as_data()
