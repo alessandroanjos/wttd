@@ -26,10 +26,20 @@ class SubscriptionForm(forms.Form):
 
         words = []
 
+        # usando um set
+        prep = {'da', 'das', 'de', 'do', 'dos'}
+
+        # usando uma list
+        prep = ['da', 'das', 'de', 'do', 'dos']
+
         for w in name.split():
-            words.append(w.capitalize())
+            if w not in prep:
+                words.append(w.capitalize())
+
         capitalized_name = ' '.join(words)
 
         # words = [w.capitalize() for w in name.split()]
+        # words = [w.capitalize() if w not in prep else w for w in name.split()]
+        # words = (w.capitalize() if w not in prep else w for w in name.split())
 
         return capitalized_name
