@@ -36,9 +36,8 @@ class SubscriptionFormTest(TestCase):
         self.assertFormErrorCode(form, field, code)
 
     def test_cpf_is_invalid(self):
-        pass
-        # CPF must only accepts digits
-        form = self.make_validated_form(cpf='01234567891')
+        """CPF must only accepts digits"""
+        form = self.make_validated_form(cpf='12345678901')
         self.assertListEqual(['cpf'], list(form.errors))
 
     def assertFormErrorCode(self, form, field, code):
