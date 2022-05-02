@@ -7,7 +7,7 @@
         "slug": "alan-turing",
         "photo": "http://hbn.link/turing-pic",
         "website": "http://hbn.link/turing-site",
-        "description": ""
+        "description": "Matemático, cientista da computação, lógico, criptoanalista, filósofo e biólogo teórico britânico. Turing foi altamente influente no desenvolvimento da ciência da computação teórica, proporcionando uma formalização dos conceitos de algoritmo e computação com a máquina de Turing, que pode ser considerada um modelo de um computador de uso geral. Ele é amplamente considerado o pai da ciência da computação teórica e da inteligência artificial."
     }
 },
 {
@@ -18,7 +18,7 @@
         "slug": "grace-hopper",
         "photo": "http://hbn.link/hopper-pic",
         "website": "http://hbn.link/hopper-site",
-        "description": ""
+        "description": "Programadora e almirante. Inventora do compilador, criadora da linguagem de programação Flow-Matic serviu de base para a linguagem COBOL permitindo a popularização de aplicações comerciais."
     }
 }
 ]
